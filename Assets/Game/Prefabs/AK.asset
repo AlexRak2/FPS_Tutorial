@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 869aef5f9a2af7645b3c440549d9b615, type: 3}
+  m_Name: AK
+  m_EditorClassIdentifier: 
+  Damage: 32
+  MaxAmmo: 90
+  ClipSize: 30
+  roundsPerMinute: 600
+  FiringType: 0
+  recoilX: -2
+  recoilY: 1
+  recoilZ: 0.35
+  snappiness: 6
+  returnSpeed: 2

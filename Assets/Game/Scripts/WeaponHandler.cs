@@ -24,11 +24,118 @@ public class WeaponHandler : NetworkBehaviour
     [SyncVar(OnChange = nameof(OnSecondaryIndexChange))]
     private byte secondaryGunIndex;
 
+    private CameraRecoil camRecoil;
+
+    public bool CanShoot() => currentGun && currentGun.currentAmmo > 0 && !isReloading && !currentGun.anim.GetBool("IsEquipping") && fireTime <= 0;
+    public bool CanReload() => currentGun && (currentGun.currentAmmo < currentGun.gunDefinition.ClipSize && currentGun.currentTotalAmmo > 0);
+
+    bool isReloading;
+    float fireTime;
+
+    
     public override void OnStartServer()
     {
         base.OnStartServer();
 
+        //temporary untill spawning default weapon logic
         EquipGunSlot(0, 0);
+        EquipGunSlot(1, 1);
+    }
+
+    private void Start()
+    {
+        camRecoil = GetComponent<CameraRecoil>();
+    }
+
+    private void Update()
+    {
+
+        HandleFiring();
+        HandleReload();
+
+        #region Equip Handling
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (secondaryGun && currentGun != secondaryGun)
+                CmdChangeCurrentIndex(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2)) 
+        {
+            if(primaryGun && currentGun != primaryGun)
+               CmdChangeCurrentIndex(1);
+        }
+        #endregion
+    }
+
+    private void HandleReload()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && CanReload()) 
+        {
+            currentGun.anim.SetBool("IsReloading", true);
+            isReloading = true;
+        }
+    }
+
+    public void ReloadGun() 
+    {
+
+        int ammoToAdd = (int)Mathf.Min(currentGun.gunDefinition.ClipSize - currentGun.currentAmmo, currentGun.currentTotalAmmo);
+
+        currentGun.currentAmmo += ammoToAdd;
+        currentGun.currentTotalAmmo -= ammoToAdd;
+
+        currentGun.anim.SetBool("IsReloading", false);
+        isReloading = false;
+    }
+
+    private void HandleFiring()
+    {
+        if (fireTime > 0)
+            fireTime -= Time.deltaTime;
+
+        switch (currentGun.gunDefinition.FiringType)
+        {
+            case FiringType.Auto:
+                AutoFire();
+                break;
+            case FiringType.Semi:
+                SemiAutoFire();
+                break;
+        }
+    }
+
+    private void SemiAutoFire() 
+    {
+        if (Input.GetMouseButtonDown(0) && CanShoot())
+        {
+            fireTime = 60 / currentGun.gunDefinition.roundsPerMinute;
+            AttemptFire();
+        }
+    }
+
+    private void AutoFire()
+    {
+        if (Input.GetMouseButton(0) && CanShoot())
+        {
+            fireTime = 60 / currentGun.gunDefinition.roundsPerMinute;
+            AttemptFire();
+        }
+    }
+
+
+    private void AttemptFire()
+    {
+        currentGun.anim.SetTrigger("Fire");
+        currentGun.currentAmmo--;
+        currentGun.muzzleFx.Play();
+
+        camRecoil.RecoilFire();
+    }
+
+    [ServerRpc]
+    private void CmdChangeCurrentIndex(byte index) 
+    {
+        currentGunIndex = index;
     }
 
     public void EquipGunSlot(byte slotIndex, byte gunID) 
@@ -57,6 +164,7 @@ public class WeaponHandler : NetworkBehaviour
             currentGun = primaryGun;
         }
     }
+
 
     #region Sync Hooks
     private void OnWeaponIndexChange(byte oldValue, byte newValue, bool asServer)
