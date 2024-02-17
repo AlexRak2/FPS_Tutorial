@@ -9,14 +9,15 @@ public class Gun : MonoBehaviour
     public int currentTotalAmmo;
 
     public ParticleSystem muzzleFx;
- 
+    public GameObject posPivot, rotPivot;
+
     private WeaponHandler weaponHandler;
 
     public Animator anim { get; private set; }
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
         weaponHandler = GetComponentInParent<WeaponHandler>();
 
         InitializeGun();
@@ -28,8 +29,4 @@ public class Gun : MonoBehaviour
         currentTotalAmmo = gunDefinition.MaxAmmo;
     }
 
-    public void ReloadGunEvent() 
-    {
-        weaponHandler.ReloadGun();
-    }
 }

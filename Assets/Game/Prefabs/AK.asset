@@ -16,9 +16,23 @@ MonoBehaviour:
   MaxAmmo: 90
   ClipSize: 30
   roundsPerMinute: 600
+  BulletSpread: {x: 0.05, y: 0.05, z: 0.05}
   FiringType: 0
-  recoilX: -2
-  recoilY: 1
-  recoilZ: 0.35
-  snappiness: 6
-  returnSpeed: 2
+  bulletTracer: {fileID: 280073417891229385, guid: b6f96869d963a1e4aa70e62a50ee51ac,
+    type: 3}
+  aimSpeed: 20
+  aimPosition: {x: -0.003, y: -0.16, z: 0.15}
+  aimRotation: {x: 1.16, y: -0.2, z: 0}
+  recoilX: 0
+  recoilY: 0
+  recoilZ: 0
+  snappiness: 0
+  returnSpeed: 0
+  intensity: 0.05
+  maxAmount: 0.05
+  smoothAmount: 4
+  posAimMultiplier: 0.1
+  rotationAmount: 30
+  maxRotationAmount: 10
+  smoothRotation: 4
+  rotAimMultiplier: 0.1

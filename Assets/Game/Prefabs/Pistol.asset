@@ -15,10 +15,24 @@ MonoBehaviour:
   Damage: 13
   MaxAmmo: 42
   ClipSize: 7
-  roundsPerMinute: 150
+  roundsPerMinute: 500
+  BulletSpread: {x: 0, y: 0, z: 0}
   FiringType: 1
+  bulletTracer: {fileID: 280073417891229385, guid: b6f96869d963a1e4aa70e62a50ee51ac,
+    type: 3}
+  aimSpeed: 20
+  aimPosition: {x: -0.005, y: -0.112, z: 0.3}
+  aimRotation: {x: 2.94, y: 1.34, z: 0}
   recoilX: -2
   recoilY: 1
   recoilZ: 0.35
   snappiness: 12
   returnSpeed: 6
+  intensity: 0.05
+  maxAmount: 0.05
+  smoothAmount: 4
+  posAimMultiplier: 0.1
+  rotationAmount: 30
+  maxRotationAmount: 20
+  smoothRotation: 4
+  rotAimMultiplier: 0.1
